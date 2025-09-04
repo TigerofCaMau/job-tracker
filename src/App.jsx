@@ -16,12 +16,12 @@ function App() {
 
   // Save jobs to local storage whenever they change
   useEffect(() => {
-    localStorage.setItem('jobs', JSON.stringify(jobs));
+    localStorage.setItem('jobs', JSON.toString(jobs));
   }, [jobs]);
 
   // Add a job
   const handleAddJob = (newJob) => {
-    const jobWithId = { ...newJob, id: Date.now().stringify() };
+    const jobWithId = { ...newJob, id: Date.now().toString() };
     setJobs([...jobs, jobWithId]);
   };
 
