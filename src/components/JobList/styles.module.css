@@ -1,0 +1,14 @@
+.jobList {
+  padding: 0.5rem 0;
+}
+
+.sectionTitle {
+  color: #ffd166;
+  font-size: 1.3rem;
+  margin-bottom: 0.25rem;
+}
+
+.noJob {
+  color: #b9e6e3;
+  margin-bottom: 1rem;
+}

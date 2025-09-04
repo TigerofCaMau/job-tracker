@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #25a9a1, #2bb3a5);
+  color: #fff;
+  letter-spacing: .1rem;
+}
+
+.appContainer {
+  max-width: 500px;
+  margin: 2rem auto;
+  background-color: #1c8b86;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffe9a9;
+  margin-bottom: 1.5rem;
+}
