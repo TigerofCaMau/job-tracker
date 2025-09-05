@@ -10,8 +10,13 @@ function App() {
 
   // Load jobs from local storage on mount
   useEffect(() => {
-    const savedJobs = JSON.parse(localStorage.getItem('jobs')) || [];
-    setJobs(savedJobs);
+    try {
+      const savedJobs = JSON.parse(localStorage.getItem('jobs')) || [];
+      setJobs(savedJobs);
+    } catch (e) {
+      console.error("Failed to parse jobs from localStorage", e);
+      setJobs([]); // Fallback if corrupted
+    }
   }, []);
 
   // Save jobs to local storage whenever they change
