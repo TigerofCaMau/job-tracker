@@ -8,63 +8,66 @@ function App() {
   const [jobToEditIndex, setJobToEditIndex] = useState(null);
   const [jobToEdit, setJobToEdit] = useState(null);
 
-  // Load jobs from local storage on mount
+  // Load jobs from localStorage when the app starts
   useEffect(() => {
     try {
-      const savedJobs = JSON.parse(localStorage.getItem('jobs')) || [];
-      setJobs(savedJobs);
+      const savedJobs = localStorage.getItem('jobs');
+      if (savedJobs) {
+        setJobs(JSON.parse(savedJobs));
+      }
     } catch (e) {
-      console.error("Failed to parse jobs from localStorage", e);
-      setJobs([]); // Fallback if corrupted
+      console.error("Failed to load jobs:", e);
+      setJobs([]);
     }
   }, []);
 
-  // Save jobs to local storage whenever they change
+  // Save jobs to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('jobs', JSON.toString(jobs));
+    localStorage.setItem('jobs', JSON.stringify(jobs));
   }, [jobs]);
 
-  // Add a job
+  // Add a new job
   const handleAddJob = (newJob) => {
-    const jobWithId = { ...newJob, id: Date.now().toString() };
+    const jobWithId = {
+      ...newJob,
+      id: Date.now().toString(),
+      notes: newJob.notes || ''  // always keep notes
+    };
     setJobs([...jobs, jobWithId]);
   };
 
   // Start editing a job
   const handleEditJob = (job, index) => {
-    // Put the job into state so JobForm can load it
     setJobToEdit(job);
-
-    // Remember which job we are editing
     setJobToEditIndex(index);
   };
 
-  // Update the job after editing
+  // Update a job after editing
   const handleUpdateJob = (updatedJob) => {
-    // Copy the jobs array (never mutate directly)
     const updatedJobs = [...jobs];
-
-    // Replace the job at the stored index with the new one
-    // Keep the original id so it doesn't change
-    updatedJobs[jobToEditIndex] = { 
-      ...updatedJob, 
-      id: updatedJobs[jobToEditIndex].id 
+    updatedJobs[jobToEditIndex] = {
+      ...updatedJob,
+      id: updatedJobs[jobToEditIndex].id,
+      notes: updatedJob.notes || ''
     };
-
-    // Save the updated array
     setJobs(updatedJobs);
-
-    // Reset state to exit edit mode
     setJobToEdit(null);
     setJobToEditIndex(null);
   };
 
-// Cancel editing
-const handleCancelEdit = () => {
-  // Just reset edit state without changing jobs
-  setJobToEdit(null);
-  setJobToEditIndex(null);
-};
+  // Quick note editing 
+  const handleQuickNote = (job, newNotes) => {
+    const updatedJobs = jobs.map(j =>
+      j.id === job.id ? { ...j, notes: newNotes } : j
+    );
+    setJobs(updatedJobs);
+  }
+
+  // Cancel editing
+  const handleCancelEdit = () => {
+    setJobToEdit(null);
+    setJobToEditIndex(null);
+  };
 
   // Delete a job
   const handleDeleteJob = (indexToRemove) => {
@@ -87,6 +90,7 @@ const handleCancelEdit = () => {
         jobs={jobs}
         onDelete={handleDeleteJob}
         onEdit={handleEditJob}
+        onQuickNote={handleQuickNote}
       />
     </div>
   );
