@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { highlightMatch } from '../../utils/highlight';
 import styles from './styles.module.css';
 import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 
-const JobCard = ({ job, onDelete, onEdit, onQuickNote }) => {
+const JobCard = ({ job, onDelete, onEdit, onQuickNote, searchTerm }) => {
   const [showQuickNotes, setShowQuickNotes] = useState(false);
   const [tempNotes, setTempNotes] = useState(job.notes || '');
   const MAX_NOTES_LENGTH = 500;
@@ -33,10 +34,10 @@ const JobCard = ({ job, onDelete, onEdit, onQuickNote }) => {
   return (
     <div className={styles.card}>
       <div className={styles.info}>
-        <h3 className={styles.title}>{job.jobTitle}</h3>
-        <p className={styles.detail}><strong>Company:</strong>{job.company}</p>
-        <p className={styles.detail}><strong>Applied on:</strong>{job.applicationDate}</p>
-        <p className={styles.detail}><strong>Status:</strong>{job.status}</p>
+        <h3 className={styles.title}>{highlightMatch(job.jobTitle, searchTerm)}</h3>
+        <p className={styles.detail}><strong>Company:</strong> {highlightMatch(job.company, searchTerm)}</p>
+        <p className={styles.detail}><strong>Applied on:</strong> {highlightMatch(job.applicationDate, searchTerm)}</p>
+        <p className={styles.detail}><strong>Status:</strong> {highlightMatch(job.status, searchTerm)}</p>
         
         {job.notes?.trim() && !showQuickNotes && (
           <p className={`${styles.detail} ${styles.notesText}`}>

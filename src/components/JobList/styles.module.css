@@ -5,10 +5,54 @@
 .sectionTitle {
   color: #ffd166;
   font-size: 1.3rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 1rem;
 }
 
-.noJob {
-  color: #b9e6e3;
-  margin-bottom: 1rem;
+.searchWrapper {
+  margin-bottom: 1.2rem;
+}
+
+.searchWrapper input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 2px solid #0d3b66;
+  background-color: #ffffff;
+  color: #0d3b66;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.searchWrapper input::placeholder {
+  color: #94a3b8;
+}
+
+.searchWrapper input:focus {
+  border-color: #fbbf24;
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.6);
+  outline: none;
+}
+
+.resultCount {
+  text-align: left;
+  color: #e8e6df;
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin: 0.6rem 0 1rem 0.3rem;
+  letter-spacing: 0.2px;
+  opacity: 0.95;
+  font-style: italic;
+}
+
+.noResults {
+  text-align: center;
+  font-size: 1rem;
+  color: #e2e8f0;
+  background-color: rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  font-style: italic;
 }

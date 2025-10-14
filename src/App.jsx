@@ -1,75 +1,107 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import JobForm from './components/JobForm';
 import JobList from './components/JobList';
 import './App.css';
 
+// --- LocalStorage helpers ---
+const loadJobs = () => {
+  try {
+    if (!window?.localStorage) return [];
+    const saved = localStorage.getItem('jobs');
+    return saved ? JSON.parse(saved) : [];
+  } catch (e) {
+    console.warn('localStorage unavailable, using memory only:', e);
+    return [];
+  }
+}
+
+const saveJobs = (jobs) => {
+  try {
+    if (!window?.localStorage) return;
+    localStorage.setItem('jobs', JSON.stringify(jobs));
+  } catch (e) {
+    console.warn('Failed to save jobs to localStorage:', e);  
+  }
+};
+
 function App() {
-  const [jobs, setJobs] = useState([]);
+  // Load jobs from localStorage on mount
+  const [jobs, setJobs] = useState(() => loadJobs());
   const [jobToEditIndex, setJobToEditIndex] = useState(null);
   const [jobToEdit, setJobToEdit] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Load jobs from localStorage when the app starts
-  useEffect(() => {
-    try {
-      const savedJobs = localStorage.getItem('jobs');
-      if (savedJobs) {
-        setJobs(JSON.parse(savedJobs));
-      }
-    } catch (e) {
-      console.error("Failed to load jobs:", e);
-      setJobs([]);
-    }
-  }, []);
+  // Momoize the filtered list - recompute only when jobs or searchTerm change
+  const filteredJobs = useMemo(() => {
+    if (!searchTerm.trim()) return jobs; // no filter
 
-  // Save jobs to localStorage whenever they change
+    const terms = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+
+    return jobs.filter(job => {
+      // Combine the fields we want searchable
+      const haystack = [
+        job.jobTitle,
+        job.company,
+        job.status,
+        job.applicationDate,
+        job.notes,
+      ]
+        .filter(Boolean) // drop undefined/null
+        .join(' ')
+        .toLowerCase();
+      
+      // Every search word must appear somewhere
+      return terms.every(term => haystack.includes(term));
+    });
+  }, [jobs, searchTerm]);
+
+  // Save jobs whenever they change
   useEffect(() => {
-    localStorage.setItem('jobs', JSON.stringify(jobs));
+    saveJobs(jobs);
   }, [jobs]);
 
-  // Add a new job
+  // --- Handlers ---
   const handleAddJob = (newJob) => {
     const jobWithId = {
       ...newJob,
       id: Date.now().toString(),
-      notes: newJob.notes || ''  // always keep notes
+      notes: newJob.notes || ''
     };
     setJobs([...jobs, jobWithId]);
   };
 
-  // Start editing a job
   const handleEditJob = (job, index) => {
     setJobToEdit(job);
     setJobToEditIndex(index);
   };
 
-  // Update a job after editing
   const handleUpdateJob = (updatedJob) => {
+    if (jobToEditIndex === null) return; // safety check
+
     const updatedJobs = [...jobs];
     updatedJobs[jobToEditIndex] = {
       ...updatedJob,
       id: updatedJobs[jobToEditIndex].id,
       notes: updatedJob.notes || ''
     };
+
     setJobs(updatedJobs);
     setJobToEdit(null);
     setJobToEditIndex(null);
   };
 
-  // Quick note editing 
   const handleQuickNote = (job, newNotes) => {
-    const updatedJobs = jobs.map(j =>
+    const updatedJobs = jobs.map((j) =>
       j.id === job.id ? { ...j, notes: newNotes } : j
     );
     setJobs(updatedJobs);
-  }
+  };
 
-  // Cancel editing
   const handleCancelEdit = () => {
     setJobToEdit(null);
     setJobToEditIndex(null);
   };
 
-  // Delete a job
   const handleDeleteJob = (indexToRemove) => {
     const updatedJobs = jobs.filter((_, index) => index !== indexToRemove);
     setJobs(updatedJobs);
@@ -79,6 +111,7 @@ function App() {
     <div className="appContainer">
       <h1 className="title">Job Tracker</h1>
 
+
       <JobForm
         onAddJob={handleAddJob}
         jobToEdit={jobToEdit}
@@ -87,10 +120,12 @@ function App() {
       />
 
       <JobList
-        jobs={jobs}
+        jobs={filteredJobs}
         onDelete={handleDeleteJob}
         onEdit={handleEditJob}
         onQuickNote={handleQuickNote}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
       />
     </div>
   );
