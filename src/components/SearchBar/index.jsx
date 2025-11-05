@@ -21,7 +21,7 @@ const SearchBar = ({ value, onChange }) => {
                 <span className={styles.searchIcon}>🔍</span>
                 <input
                     type="search"
-                    placeholder="Search job listings by title, company, or status"
+                    placeholder="Search jobs"
                     value={internal}
                     onChange={e => setInternal(e.target.value)}
                     className={styles.searchInput}

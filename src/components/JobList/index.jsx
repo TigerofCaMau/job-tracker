@@ -1,22 +1,79 @@
-import styles from './styles.module.css';
 import SearchBar from '../../components/SearchBar'
 import JobCard from '../JobCard';
+import styles from './styles.module.css';
 
-const JobList = ({ jobs, onDelete, onEdit, onQuickNote, searchTerm, setSearchTerm }) => {
-    const searchtCount = searchTerm.trim().length > 0;
+const JobList = ({
+    jobs,
+    onDelete,
+    onEdit,
+    onQuickNote,
+    searchTerm,
+    setSearchTerm,
+    sortOption,
+    setSortOption,
+    showUndo,
+    handleClearAllJobs,
+    handleUndoClearJobs
+}) => {
+    const searchCount = searchTerm.trim().length > 0;
+    
     return (
         <div className={styles.jobList}>
             <h2 className={styles.sectionTitle}>Tracked Jobs</h2>
             
-            <div className={styles.searchWrapper}x>
-                <SearchBar
+            {/* Clear and undo buttons */}
+            <div className={styles.buttonContainer}>
+                {jobs.length > 0 && (
+                    <button
+                        aria-label="Remove all tracked jobs"
+                        onClick={handleClearAllJobs}
+                        className={styles.clearButton}
+                        disabled={showUndo}
+                    >
+                        Clear All Jobs
+                    </button>
+                )}
+
+                {showUndo ? (
+                    <button
+                        aria-label="Undo removing tracked jobs"
+                        onClick={handleUndoClearJobs}
+                        className={styles.undoButton}
+                    >
+                        Undo
+                    </button>
+                ) : null}
+            </div>
+
+            {/* Search & sorting */}
+            <div className={styles.toolbar}>
+                <div className={styles.searchWrapper}>
+                    <SearchBar
                     value={searchTerm}
                     onChange={setSearchTerm}
-                />
+                    />
+                </div>
+
+                <div className={styles.sortWrapper}>
+                    <label htmlFor="sort" className={styles.sortLabel}>Sort by:</label>
+                    <select
+                    id="sort"
+                    value={sortOption}
+                    onChange={e => setSortOption(e.target.value)}
+                    className={styles.sortSelect}
+                    >
+                    <option value="dateDesc">Date (newest first)</option>
+                    <option value="dateAsc">Date (oldest first)</option>
+                    <option value="companyAsc">Company (A–Z)</option>
+                    <option value="companyDesc">Company (Z–A)</option>
+                    <option value="statusAsc">Status (A–Z)</option>
+                    <option value="statusDesc">Status (Z–A)</option>
+                    </select>
+                </div>
             </div>
 
             {/* Result Count */}
-            {searchtCount && (
+            {searchCount && (
                 <p className={styles.resultCount}>
                     {jobs.length} {jobs.length === 1 ? 'job' : 'jobs'} found
                 </p>
@@ -34,7 +91,7 @@ const JobList = ({ jobs, onDelete, onEdit, onQuickNote, searchTerm, setSearchTer
                     <JobCard
                         key={job.id}
                         job={job}
-                        onDelete={() => onDelete(index)}
+                        onDelete={() => onDelete(job.id)}
                         onEdit={() => onEdit(job, index)}
                         onQuickNote={onQuickNote}
                         searchTerm={searchTerm}
