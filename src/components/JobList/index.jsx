@@ -92,7 +92,7 @@ const JobList = ({
                         activeStatusFilter === 'Interviewing' ? null : 'Interviewing'
                     )
                     }
-                    isActive={activeStatusFilter === 'Interview'}
+                    isActive={activeStatusFilter === 'Interviewing'}
                 />
                 <OfferButton
                     onClick={() =>
