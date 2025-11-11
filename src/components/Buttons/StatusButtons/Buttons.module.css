@@ -1,0 +1,41 @@
+.buttonBase {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-right: 0.5rem;
+  border: none;
+}
+
+/* Individual button colors */
+.appliedButton {
+  background-color: #2563eb;
+  color: white;
+}
+
+.interviewButton {
+  background-color: #f2994a;
+  color: white;
+}
+
+.offerButton {
+  background-color: #27ae60;
+  color: white;
+}
+
+.rejectedButton {
+  background-color: #eb5757;
+  color: white;
+}
+
+/* Active/Inactive states */
+.activeButton {
+  outline: 3px solid #fbbf24;
+  filter: brightness(1.15);
+}
+
+.inactiveButton {
+  opacity: 0.7;
+}

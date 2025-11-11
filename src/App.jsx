@@ -39,6 +39,7 @@ function App() {
   });
   const [clearedJobsBackup, setClearedJobsBackup] = useState([]);
   const [showUndo, setShowUndo] = useState(false);
+  const [activeStatusFilter, setActiveStatusFilter] = useState(null);
 
   // --- Persist sort option and jobs ---
   useEffect(() => {
@@ -76,25 +77,37 @@ function App() {
   }, [jobs]);
 
   const filteredJobs = useMemo(() => {
-    if (!searchTerm.trim()) return jobsWithParsedDates;
+    // Start with all jobs
+    let result = jobsWithParsedDates;
 
-    const terms = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+    // 🔍 Filter by search term
+    if (searchTerm.trim()) {
+      const terms = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
 
-    return jobsWithParsedDates.filter((job) => {
-      const haystack = [
-        job.jobTitle,
-        job.company,
-        job.status,
-        job.applicationDate,
-        job.notes,
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
+      result = result.filter((job) => {
+        const haystack = [
+          job.jobTitle,
+          job.company,
+          job.status,
+          job.applicationDate,
+          job.notes,
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
 
-      return terms.every((term) => haystack.includes(term));
-    });
-  }, [jobsWithParsedDates, searchTerm]);
+        return terms.every((term) => haystack.includes(term));
+      });
+    }
+
+  // Filter by active status
+  if (activeStatusFilter) {
+    result = result.filter((job) => job.status === activeStatusFilter);
+  }
+
+  return result;
+}, [jobsWithParsedDates, searchTerm, activeStatusFilter]);
+
 
   const sortedJobs = useMemo(
     () => sortJobs(filteredJobs, sortOption),
@@ -190,6 +203,8 @@ function App() {
         showUndo={showUndo}
         handleClearAllJobs={handleClearAllJobs}
         handleUndoClearJobs={handleUndoClearJobs}
+        activeStatusFilter={activeStatusFilter}
+        setActiveStatusFilter={setActiveStatusFilter}
       />
     </div>
   );

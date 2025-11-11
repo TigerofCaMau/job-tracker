@@ -1,5 +1,9 @@
 import SearchBar from '../../components/SearchBar'
 import JobCard from '../JobCard';
+import AppliedButton from '../Buttons/StatusButtons/AppliedButton';
+import InterviewButton from '../Buttons/StatusButtons/InterviewButton';
+import OfferButton from '../Buttons/StatusButtons/OfferButton';
+import RejectedButton from '../Buttons/StatusButtons/RejectedButton';
 import styles from './styles.module.css';
 
 const JobList = ({
@@ -13,7 +17,9 @@ const JobList = ({
     setSortOption,
     showUndo,
     handleClearAllJobs,
-    handleUndoClearJobs
+    handleUndoClearJobs,
+    activeStatusFilter,
+    setActiveStatusFilter
 }) => {
     const searchCount = searchTerm.trim().length > 0;
     
@@ -71,6 +77,40 @@ const JobList = ({
                     </select>
                 </div>
             </div>
+
+            {/* Status buttons */}
+            <div className={styles.statusButtons}>
+                <AppliedButton
+                    onClick={() =>
+                    setActiveStatusFilter(activeStatusFilter === 'Applied' ? null : 'Applied')
+                    }
+                    isActive={activeStatusFilter === 'Applied'}
+                />
+                <InterviewButton
+                    onClick={() =>
+                    setActiveStatusFilter(
+                        activeStatusFilter === 'Interview' ? null : 'Interview'
+                    )
+                    }
+                    isActive={activeStatusFilter === 'Interview'}
+                />
+                <OfferButton
+                    onClick={() =>
+                    setActiveStatusFilter(activeStatusFilter === 'Offer' ? null : 'Offer')
+                    }
+                    isActive={activeStatusFilter === 'Offer'}
+                />
+                <RejectedButton
+                    onClick={() =>
+                    setActiveStatusFilter(
+                        activeStatusFilter === 'Rejected' ? null : 'Rejected'
+                    )
+                    }
+                    isActive={activeStatusFilter === 'Rejected'}
+                />
+                </div>
+
+            {/* Toggler filter off */}
 
             {/* Result Count */}
             {searchCount && (
