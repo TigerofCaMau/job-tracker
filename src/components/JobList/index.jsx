@@ -89,7 +89,7 @@ const JobList = ({
                 <InterviewButton
                     onClick={() =>
                     setActiveStatusFilter(
-                        activeStatusFilter === 'Interview' ? null : 'Interview'
+                        activeStatusFilter === 'Interviewing' ? null : 'Interviewing'
                     )
                     }
                     isActive={activeStatusFilter === 'Interview'}

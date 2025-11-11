@@ -14,7 +14,7 @@ const InterviewButton: React.FC<ButtonProps> = ({ onClick, isActive }) => {
 
   return (
     <button type="button" className={combinedClassName} onClick={onClick}>
-      Interview
+      Interviewing
     </button>
   );
 };
