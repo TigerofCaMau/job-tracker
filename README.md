@@ -1,12 +1,65 @@
-# React + Vite
+📌 Job Tracker App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple, clean, and efficient web application for managing and tracking your job applications.
+Built with React + Vite, featuring filtering, sorting, searching, and full CRUD functionality.
 
-Currently, two official plugins are available:
+🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔹 Job Management
+- Add new job applications
+- Edit existing applications
+- Delete jobs
+- Undo the most recent deletion
+- Clear all jobs at once
 
-## Expanding the ESLint configuration
+🔹 Status Filters
+- Filter jobs by application status:
+- Applied
+- Interview
+- Offer
+- Rejected
+- Reset to view all
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🔹 Search & Sorting
+- Full-text search by company, title, or notes
+- Sort by Company, Job Title, or Date Applied
+
+🔹 UI & UX
+- Fully responsive design
+- Clean and consistent component structure
+- Highlighted active filter button
+- Smooth button interactions and accessible layout
+
+🛠️ Tech Stack
+
+Frontend
+- React (with Hooks)
+- Vite
+- CSS Modules
+- TypeScript (utility types)
+
+Tooling
+- ESLint
+
+📂 Project Structure
+
+```
+src/
+  components/
+    Buttons/
+      StatusButtons/
+      AddButton/
+      CancelButton/
+      DeleteButton/
+      EditButton/
+    JobCard/
+    JobForm/
+    JobList/
+    SearchBar/
+  data/
+  utils/
+  App.jsx
+  App.css
+  main.jsx
+  index.css
+  ```
